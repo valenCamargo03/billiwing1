@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Facturación y Contabilidad</title>
+  <style>
+    :root {
+      --morado-oscuro: #8d1648;
+      --morado-claro: #6b1b57;
+      --gris-claro: #f0f4f8;
+      --gris-medio: #555;
+      --blanco: #fff;
+      --sombra: rgba(138, 18, 112, 0.15);
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: var(--gris-claro);
+      margin: 0;
+      padding: 20px;
+      color: var(--gris-medio);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(90deg, var(--morado-oscuro), var(--morado-claro));
+      padding: 20px 40px;
+      color: var(--blanco);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px var(--sombra);
+      margin-bottom: 40px;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      user-select: none;
+    }
+    .login-btn {
+      background-color: var(--blanco);
+      color: var(--morado-oscuro);
+      border: none;
+      padding: 12px 28px;
+      cursor: pointer;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 3px 10px rgba(106, 27, 154, 0.3);
+      user-select: none;
+    }
+    .login-btn:hover,
+    .login-btn:focus {
+      background-color: var(--morado-claro);
+      color: var(--blanco);
+      transform: scale(1.08);
+      box-shadow: 0 5px 20px var(--morado-claro);
+      outline: none;
+    }
+
+    .module-container {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 30px;
+    }
+    .module {
+      background-color: var(--blanco);
+      border-radius: 15px;
+      padding: 30px 20px 40px;
+      box-shadow: 0 6px 18px var(--sombra);
+      text-align: center;
+      flex: 1 1 280px;
+      max-width: 320px;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .module:hover,
+    .module:focus-within {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px var(--morado-claro);
+      outline: none;
+    }
+    .module img {
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+      margin-bottom: 25px;
+      transition: filter 0.3s;
+      user-select: none;
+    }
+    .module:hover img,
+    .module:focus-within img {
+      filter: drop-shadow(0 0 5px var(--morado-claro));
+    }
+    .module h2 {
+      color: var(--morado-oscuro);
+      margin: 0 0 12px;
+      font-size: 1.8rem;
+      font-weight: 800;
+      user-select: none;
+    }
+    .module p {
+      color: var(--gris-medio);
+      font-size: 1rem;
+      flex-grow: 1;
+      user-select: none;
+    }
+    .module button {
+      margin-top: 25px;
+      background-color: var(--morado-oscuro);
+      color: var(--blanco);
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(106, 27, 154, 0.3);
+      transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      user-select: none;
+    }
+    .module button:hover,
+    .module button:focus {
+      background-color: var(--morado-claro);
+      box-shadow: 0 8px 28px var(--morado-claro);
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    @media (max-width: 768px) {
+      .module-container {
+        justify-content: center;
+      }
+      .module {
+        max-width: 100%;
+        flex-basis: 100%;
+      }
+      .header {
+        flex-direction: column;
+        gap: 20px;
+        padding: 25px;
+      }
+      .header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+
+  <script>
+    function solicitarCodigo() {
+      const codigoCorrecto = '1234'; // Puedes cambiar el código aquí
+      const codigoIngresado = prompt('Por favor, ingrese el código de acceso autorizado:');
+
+      if (codigoIngresado === codigoCorrecto) {
+        alert('Acceso autorizado. Bienvenido.');
+        window.location.href = 'dashboard.html'; // Página para usuarios autorizados
+      } else if (codigoIngresado === null) {
+        // Si presionan cancelar, no hacer nada
+      } else {
+        alert('Código incorrecto. Acceso denegado.');
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Facturación y Contabilidad</h1>
+    <button class="login-btn" aria-label="Iniciar sesión" onclick="solicitarCodigo()">Entrar</button>
+  </div>
+
+  <div class="module-container">
+    <div class="module" tabindex="0" role="region" aria-labelledby="facturacion-title">
+      <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Icono de Facturación" />
+      <h2 id="facturacion-title">Facturación</h2>
+      <p>Gestione sus facturas de manera eficiente y rápida.</p>
+      <button class="login-btn" onclick="window.location.href='facturacion.html'" aria-label="Acceder a Facturación">Acceder</button>
+    </div>
+
+    <div class="module" tabindex="0" role="region" aria-labelledby="contabilidad-title">
+      <img src="https://cdn-icons-png.flaticon.com/512/263/263115.png" alt="Icono de Contabilidad" />
+      <h2 id="contabilidad-title">Contabilidad</h2>
+      <p>Controle sus finanzas y genere reportes contables.</p>
+      <button class="login-btn" onclick="window.location.href='contabilidad.html'" aria-label="Acceder a Contabilidad">Acceder</button>
+    </div>
+
+    <div class="module" tabindex="0" role="region" aria-labelledby="verificacion-title">
+      <img src="https://cdn-icons-png.flaticon.com/512/565/565655.png" alt="Icono de Verificación" />
+      <h2 id="verificacion-title">Verificación de Facturas</h2>
+      <p>Acceso especial para verificar y validar facturas.</p>
+      <button class="login-btn" onclick="window.location.href='verificacion.html'" aria-label="Acceso Especial">Acceso Especial</button>
+    </div>
+
+    <div class="module" tabindex="0" role="region" aria-labelledby="modificar-title">
+      <img src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png" alt="Icono de Modificar Factura" />
+      <h2 id="modificar-title">Modificar Factura</h2>
+      <p>Acceda para modificar facturas existentes.</p>
+      <button class="login-btn" onclick="window.location.href='modificar.html'" aria-label="Acceder a Modificar Factura">Acceder</button>
+    </div>
+  </div>
+
+</body>
+</html>
