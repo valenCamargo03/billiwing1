@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BILLIWING - Iniciar Sesión</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Enlace al archivo CSS -->
+</head>
+<body>
+    <div class="container">
+        <h1 class="logo">BILLIWING</h1>
+        <p class="subtitle">Iniciar Sesión</p>
+        
+        <div id="message" class="message" style="display: none;"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="identifier">Usuario o Email:</label>
+                <input type="text" id="identifier" name="identifier" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" id="loginBtn" class="btn-login">
+                Iniciar Sesión
+            </button>
+            
+            <div id="loading" class="loading"></div>
+        </form>
+        
+        <div class="register-link">
+            ¿No tienes cuenta? <a href="register.html">Regístrate aquí</a>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000'; // Cambia esto si tu API está en otro puerto
+        
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const loginBtn = document.getElementById('loginBtn');
+            const loading = document.getElementById('loading');
+            const messageDiv = document.getElementById('message');
+            
+            const identifier = document.getElementById('identifier').value;
+            const password = document.getElementById('password').value;
+            
+            // Mostrar loading
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Iniciando sesión...';
+            loading.style.display = 'block';
+            messageDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        identifier: identifier,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Guardar token en localStorage
+                    localStorage.setItem('billiwingToken', data.token);
+                    localStorage.setItem('billiwingUser ', JSON.stringify(data.user));
+                    
+                    // Mostrar mensaje de éxito
+                    showMessage('Inicio de sesión exitoso.', 'success');
+                    
+                    // Redirigir al dashboard después de 2 segundos
+                    setTimeout(() => {
+                        window.location.href = '../BIlliwing.html'; // Cambia esto a la ruta correcta
+                    }, 2000);
+                    
+                } else {
+                    showMessage(data.message || 'Error de autenticación', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error de conexión. Verifica que el servidor esté funcionando.', 'error');
+            } finally {
+                // Ocultar loading
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Iniciar Sesión';
+                loading.style.display = 'none';
+            }
+        });
+        
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+        }
+        
+        // Verificar si ya está logueado
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('billiwingToken');
+            if (token) {
+                window.location.href = '../BIlliwing.html'; // Cambia esto a la ruta correcta
+            }
+        });
+    </script>
+</body>
+</html>

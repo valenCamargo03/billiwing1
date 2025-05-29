@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sistema Web de Contabilidad - Finanzas Inteligentes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    /* Colores principales */
+    :root {
+      --rosa-oscuro: #8b166a;
+      --rosa-claro: #d76ba3;
+      --azul-oscuro: #1a3e5c;
+      --azul-claro: #4a90e2;
+      --gris-claro: #f7f9fc;
+      --gris-medio: #cbd3db;
+    }
+    body {
+      background-color: var(--gris-claro);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--azul-oscuro);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: linear-gradient(90deg, var(--rosa-oscuro), var(--rosa-claro));
+      color: white;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      border-bottom: 5px solid var(--rosa-claro);
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(139,22,106,0.5);
+    }
+    header h1 {
+      margin-bottom: 0.3rem;
+      font-weight: 700;
+      font-size: 2.2rem;
+      letter-spacing: 1.2px;
+    }
+    .container {
+      flex: 1;
+      max-width: 960px;
+      margin: 0 auto 3rem auto;
+      padding: 0 1rem;
+    }
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(26,62,92,0.15);
+      background-color: white;
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(26,62,92,0.2);
+    }
+    .card-header {
+      background: linear-gradient(90deg, var(--rosa-claro), var(--rosa-oscuro));
+      color: white;
+      font-weight: 700;
+      font-size: 1.25rem;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      padding: 1rem 1.5rem;
+      box-shadow: inset 0 -3px 5px rgba(139,22,106,0.2);
+    }
+    label {
+      font-weight: 600;
+      color: var(--azul-oscuro);
+    }
+    .btn-pink {
+      background-color: var(--rosa-oscuro);
+      color: white;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      border: none;
+      font-weight: 600;
+    }
+    .btn-pink:hover, .btn-pink:focus {
+      background-color: var(--rosa-claro);
+      color: var(--rosa-oscuro);
+      box-shadow: 0 0 10px var(--rosa-claro);
+    }
+    .btn-blue {
+      background-color: var(--azul-oscuro);
+      color: white;
+      border: none;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      font-weight: 600;
+    }
+    .btn-blue:hover, .btn-blue:focus {
+      background-color: var(--azul-claro);
+      color: var(--azul-oscuro);
+      box-shadow: 0 0 10px var(--azul-claro);
+    }
+    table {
+      color: var(--azul-oscuro);
+    }
+    thead.table-light {
+      background: linear-gradient(90deg, var(--rosa-claro), var(--rosa-oscuro));
+      color: white;
+    }
+    .table-striped > tbody > tr:nth-of-type(odd) {
+      background-color: var(--gris-claro);
+    }
+    .table-hover tbody tr:hover {
+      background-color: var(--gris-medio);
+    }
+    @media (max-width: 767px) {
+      header h1 {
+        font-size: 1.7rem;
+      }
+      .card-header {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Contabilidad</h1>
+    <p>Bienvenido sistema contable billiwing</p>
+  </header>
+
+  <main class="container">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-header">Registrar Movimiento</div>
+          <div class="card-body">
+            <form id="registro-form">
+              <div class="mb-3">
+                <label for="tipo" class="form-label">Tipo</label>
+                <select class="form-select" id="tipo" required>
+                  <option value="" disabled selected>Seleccionar</option>
+                  <option value="ingreso">Ingreso</option>
+                  <option value="gasto">Gasto</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <input type="text" class="form-control" id="descripcion" placeholder="Ej: Venta, Compra" required />
+              </div>
+              <div class="mb-3">
+                <label for="monto" class="form-label">Monto</label>
+                <input type="number" class="form-control" id="monto" min="0" step="0.01" required />
+              </div>
+              <div class="mb-3">
+                <label for="fecha" class="form-label">Fecha</label>
+                <input type="date" class="form-control" id="fecha" required />
+              </div>
+              <button type="submit" class="btn btn-pink w-100">Agregar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-header">Filtros</div>
+          <div class="card-body">
+            <form id="filtro-form">
+              <div class="mb-3">
+                <label for="filtro-tipo" class="form-label">Tipo</label>
+                <select class="form-select" id="filtro-tipo">
+                  <option value="todos" selected>Todos</option>
+                  <option value="ingreso">Ingreso</option>
+                  <option value="gasto">Gasto</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="filtro-fecha" class="form-label">Filtrar por mes</label>
+                <input type="month" class="form-control" id="filtro-fecha" />
+              </div>
+              <button type="submit" class="btn btn-pink w-100">Aplicar Filtros</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mt-4">
+      <div class="card-header">Resumen Contable</div>
+      <div class="card-body" id="resumen">
+        <p><strong>Total Ingresos:</strong> $<span id="total-ingresos">0.00</span></p>
+        <p><strong>Total Gastos:</strong> $<span id="total-gastos">0.00</span></p>
+        <p><strong>Balance:</strong> $<span id="balance">0.00</span></p>
+        <p><strong>Utilidad Bruta:</strong> $<span id="utilidad-bruta">0.00</span></p>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mt-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Historial de Movimientos</span>
+        <div>
+          <button id="btn-exportar" class="btn btn-pink btn-sm me-2" title="Exportar a Excel (CSV)">Exportar Excel</button>
+          <button id="btn-imprimir" class="btn btn-pink btn-sm" title="Imprimir tabla">Imprimir</button>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Monto</th>
+                <th>Fecha</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="movimientos-tabla">
+              <!-- Aquí van los movimientos -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const registroForm = document.getElementById('registro-form');
+    const filtroForm = document.getElementById('filtro-form');
+    const movimientosTabla = document.getElementById('movimientos-tabla');
+    const totalIngresosEl = document.getElementById('total-ingresos');
+    const totalGastosEl = document.getElementById('total-gastos');
+    const balanceEl = document.getElementById('balance');
+    const utilidadBrutaEl = document.getElementById('utilidad-bruta');
+
+    let movimientos = [];
+
+    function renderMovimientos(lista) {
+      movimientosTabla.innerHTML = '';
+      lista.forEach((mov, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${mov.tipo.charAt(0).toUpperCase() + mov.tipo.slice(1)}</td>
+          <td>${mov.descripcion}</td>
+          <td>$${mov.monto.toFixed(2)}</td>
+          <td>${mov.fecha}</td>
+          <td><button class="btn btn-sm btn-danger" onclick="eliminarMovimiento(${index})">Eliminar</button></td>
+        `;
+        movimientosTabla.appendChild(tr);
+      });
+    }
+
+    function actualizarResumen() {
+      const ingresos = movimientos.filter(m => m.tipo === 'ingreso');
+      const gastos = movimientos.filter(m => m.tipo === 'gasto');
+
+      const totalIngresos = ingresos.reduce((sum, m) => sum + m.monto, 0);
+      const totalGastos = gastos.reduce((sum, m) => sum + m.monto, 0);
+      const balance = totalIngresos - totalGastos;
+      const utilidadBruta = balance;
+
+      totalIngresosEl.textContent = totalIngresos.toFixed(2);
+      totalGastosEl.textContent = totalGastos.toFixed(2);
+      balanceEl.textContent = balance.toFixed(2);
+      utilidadBrutaEl.textContent = utilidadBruta.toFixed(2);
+    }
+
+    function eliminarMovimiento(index) {
+      movimientos.splice(index, 1);
+      filtrarYActualizar();
+    }
+
+    registroForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const tipo = document.getElementById('tipo').value;
+      const descripcion = document.getElementById('descripcion').value.trim();
+      const monto = parseFloat(document.getElementById('monto').value);
+      const fecha = document.getElementById('fecha').value;
+
+      if (!tipo || !descripcion || isNaN(monto) || !fecha) {
+        alert('Por favor, completa todos los campos correctamente.');
+        return;
+      }
+
+      movimientos.push({ tipo, descripcion, monto, fecha });
+      registroForm.reset();
+      filtrarYActualizar();
+    });
+
+    filtroForm.addEventListener('submit', e => {
+      e.preventDefault();
+      filtrarYActualizar();
+    });
+
+    function filtrarYActualizar() {
+      const tipoFiltro = document.getElementById('filtro-tipo').value;
+      const fechaFiltro = document.getElementById('filtro-fecha').value;
+
+      let listaFiltrada = [...movimientos];
+
+      if (tipoFiltro !== 'todos') {
+        listaFiltrada = listaFiltrada.filter(m => m.tipo === tipoFiltro);
+      }
+
+      if (fechaFiltro) {
+        const [year, month] = fechaFiltro.split('-');
+        listaFiltrada = listaFiltrada.filter(m => {
+          const movDate = new Date(m.fecha);
+          return movDate.getFullYear() === parseInt(year) && (movDate.getMonth() + 1) === parseInt(month);
+        });
+      }
+
+      renderMovimientos(listaFiltrada);
+      actualizarResumen();
+    }
+
+    // Exportar a CSV
+    document.getElementById('btn-exportar').addEventListener('click', () => {
+      if (movimientos.length === 0) {
+        alert('No hay movimientos para exportar.');
+        return;
+      }
+      const headers = ['Tipo', 'Descripción', 'Monto', 'Fecha'];
+      const rows = movimientos.map(m => [m.tipo, m.descripcion, m.monto.toFixed(2), m.fecha]);
+
+      let csvContent = 'data:text/csv;charset=utf-8,';
+      csvContent += headers.join(',') + '\n';
+      rows.forEach(row => {
+        csvContent += row.join(',') + '\n';
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', 'movimientos_contabilidad.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    // Imprimir tabla
+    document.getElementById('btn-imprimir').addEventListener('click', () => {
+      const printContent = movimientosTabla.parentElement.innerHTML;
+      const originalContent = document.body.innerHTML;
+      document.body.innerHTML = printContent;
+      window.print();
+      document.body.innerHTML = originalContent;
+      window.location.reload();
+    });
+
+    // Inicializa con datos vacíos
+    filtrarYActualizar();
+  </script>
+</body>
+</html>
